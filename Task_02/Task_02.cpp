@@ -36,29 +36,24 @@ public:
 
 class RightTriagle :public Triangle {
 public:
-    RightTriagle(int a, int b, int c, int A, int B):Triangle(a, b, c, A, B, C) {
+    RightTriagle(int a, int b, int c, int A, int B):Triangle(a, b, c, A, B, 90) {
         shapeName = "Прямоугольный треугольник";
-        this->C = 90;
+        //this->C = 90;
     }
 };
 
 class IsoscelesTriangle : public Triangle {
 public:
-    IsoscelesTriangle(int a, int b, int A, int B) :Triangle(a, b, c, A, B, C) {
+    IsoscelesTriangle(int a, int b, int A, int B) :Triangle(a, b, a, A, B, A) {
         shapeName = "Равнобедренный треугольник";
-        this->a = this->c = a;
-        this->b = b;
-        this->A = this->C = A;
-        this->B = B;
     }
 };
 
 class EquilateralTriangle : public Triangle {
 public:
-    EquilateralTriangle(int a) :Triangle(a, b, c, A, B, C) {
+    EquilateralTriangle(int a) :Triangle(a, a, a, 60, 60, 60) {
         shapeName = "Равносторонний треугольник";
-        this->a = this->b = this->c = a;
-        this->A = this->B = this->C = 60;
+        //this->A = this->B = this->C = 60;
      }
 };
 
@@ -93,20 +88,15 @@ public:
 
 class Rectangle : public Tetragon {
 public:
-    Rectangle(int a, int b) : Tetragon(a, b, c, d, A, B, C, D) {
+    Rectangle(int a, int b) : Tetragon(a, b, a, b, 90, 90, 90, 90) {
         shapeName = "Прямоугольник";
-        this->a = this->c = a;
-        this->b = this->d = b;
-        this->A = this->B = this->C = this->D = 90;
     }
 };
 
-class Square : public Tetragon {
+class Square : public Rectangle {
 public:
-    Square(int a) : Tetragon(a, b, c, d, A, B, C, D) {
+    Square(int a) : Rectangle (a, a) {
         shapeName = "Квадрат";
-        this->a = this-> b = this-> c = this->d = a;
-        this->A = this->B = this->C = this->D = 90;
     }
 };
 
@@ -119,12 +109,12 @@ public:
     }
 };
 
-class Rhombus : public Square {
+class Rhombus : public Parallelogram {
 public:
-    Rhombus(int a, int A, int B) : Square(a) {
+    Rhombus(int a, int A, int B) : Parallelogram(a, a, A, B) {
         shapeName = "Ромб";
-        this->A = this->C = A;
-        this->B = this->D = B;
+       /* this->A = this->C = A;
+        this->B = this->D = B;*/
     }
 };
 

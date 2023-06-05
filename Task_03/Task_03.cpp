@@ -4,23 +4,21 @@ class Shape {
 protected:
     std::string shapeName;
     unsigned short sideCount;
-    bool congruence;
 public:
     Shape() {
         shapeName = "Фигура";
         sideCount = 0;
     }
 
-     bool check_congruence() {
+     virtual bool check_congruence() {
         if (sideCount == 0) {
-            return this->congruence= true;
+            return true;
         }
-        else return this->congruence= false;
+        else return false;
     }
 
-    virtual std::string Congruence() {
-        check_congruence();
-        if (congruence) {
+    std::string Congruence() {
+        if (check_congruence()) {
             return "Правильная";
         }
         else {
@@ -33,6 +31,7 @@ public:
             << "Количество сторон: " << sideCount;
     }
 };
+
 
 class Triangle :public Shape {
 protected:
@@ -50,22 +49,13 @@ public:
         this->C = C;
         sideCount = 3;
     }
-    virtual bool check_congruence()  {
+    bool check_congruence() override {
         if ((A + B +C) == 180 && sideCount == 3) {
-            return this->congruence = true;
+            return true;
         }
-        else return this->congruence = false;
+        else return false;
     }
 
-     std::string Congruence() override {
-        check_congruence();
-        if (congruence) {
-            return "Правильная";
-        }
-        else {
-            return "Неправильная";
-        }
-    }
     void getInfo() override {
         std::cout << shapeName << ": " << '\n'
             << Congruence() << '\n'
@@ -81,50 +71,41 @@ public:
 
 class RightTriangle : public Triangle {
  public:
-     RightTriangle(int a, int b, int c, int A, int B) :Triangle(a, b, c, A, B, C) {
+     RightTriangle(int a, int b, int c, int A, int B) :Triangle(a, b, c, A, B, 90) {
          shapeName = "Прямоугольный треугольник";
-         this->C = 90;
-         congruence = Triangle::check_congruence();
      }
      bool check_congruence() override {
-         if (congruence == true && C == 90 ) {
-             return congruence = true;
+         if (Triangle::check_congruence() == true && C == 90) {
+             return true;
          }
-         else return congruence = false;
+         else return false;
      }
 };
 
 class IsoscelesTriangle : public Triangle {
 public:
-    IsoscelesTriangle(int a, int b, int A, int B) :Triangle(a, b, c, A, B, C) {
+    IsoscelesTriangle(int a, int b, int A, int B) :Triangle(a, b, a, A, B, A) {
         shapeName = "Равнобедренный треугольник";
-        this->a = this->c = a;
-        this->b = b;
-        this->A = this->C = A;
-        this->B = B;
-        congruence = Triangle::check_congruence();
     }
 
     bool check_congruence() override {
-        if (congruence == true && a == c && A == C ) {
-            return congruence = true;
+        if (Triangle::check_congruence() == true && a == c && A == C) {
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 };
 
 class EquilateralTriangle : public Triangle {
 public:
-    EquilateralTriangle(int a) :Triangle(a, b, c, A, B, C) {
+    EquilateralTriangle(int a) :Triangle(a, a, a, 60, 60, 60) {
         shapeName = "Равносторонний треугольник";
-        this->a = this->b = this->c = a;
-        this->A = this->B = this->C = 60;
     }
     bool check_congruence() override {
         if ((a == b && b == c) && (A == B && B == C && A == 60)) {
-            return congruence = true;
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 };
 
@@ -146,21 +127,11 @@ public:
         sideCount = 4;
     }
 
-    virtual bool check_congruence() {
+    bool check_congruence() override {
         if (sideCount == 4 && ((A + B + C +D) == 360)) {
-            return congruence = true;
+            return true;
         }
-        else return congruence = false;
-    }
-
-    std::string Congruence() override {
-        check_congruence();
-        if (congruence) {
-            return "Правильная";
-        }
-        else {
-            return "Неправильная";
-        }
+        else return false;
     }
     void getInfo() override {
         std::cout << shapeName << ": " << '\n'
@@ -179,35 +150,31 @@ public:
 
 class Rectangle : public Tetragon {
 public:
-    Rectangle(int a, int b) : Tetragon(a, b, c, d, A, B, C, D) {
+    Rectangle(int a, int b) : Tetragon(a, b, a, b, A, B, C, D) {
         shapeName = "Прямоугольник";
-        this->a = this->c = a;
-        this->b = this->d = b;
         this->A = this->B = this->C = this->D = 90;
        
     }
     bool check_congruence() override {
         if (a ==c && b== d && (A == 90 && B == 90 && C==90 && D== 90)) {
-            return congruence = true;
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 
 };
 
-class Square : public Tetragon {
+class Square : public Rectangle {
 public:
-    Square(int a) : Tetragon(a, b, c, d, A, B, C, D) {
+    Square(int a) : Rectangle(a, a) {
         shapeName = "Квадрат";
-        this->a = this->b = this->c = this->d = a;
-        this->A = this->B = this->C = this->D = 90;
     }
 
     bool check_congruence() override {
         if (a == b && b == c && c == d && (A == 90 && B == 90 && C == 90 && D == 90)) {
-            return congruence = true;
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 };
 
@@ -217,29 +184,26 @@ public:
         shapeName = "Параллелограмм";
         this->A = this->C = A;
         this->B = this->D = B;
-        congruence = Tetragon::check_congruence();
     }
     bool check_congruence() override {
-        if (congruence == true && a == c && b == d && A == C && B == D) {
-            return congruence = true;
+        if (Tetragon::check_congruence() == true && a == c && b == d && A == C && B == D) {
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 };
 
-class Rhombus : public Square {
+class Rhombus : public Parallelogram {
 public:
-    Rhombus(int a, int A, int B) : Square(a) {
+    Rhombus(int a, int A, int B) : Parallelogram(a, a, A, B) {
         shapeName = "Ромб";
-        this->A = this->C = A;
-        this->B = this->D = B;
     }
 
     bool check_congruence() override {
         if (a == b == c == d && A == C && B == D) {
-            return congruence = true;
+            return true;
         }
-        else return congruence = false;
+        else return false;
     }
 };
 
@@ -278,7 +242,7 @@ int main()
 
     std::cout << std::endl << std::endl;
 
-    EquilateralTriangle eq_tr (60);
+    EquilateralTriangle eq_tr (30);
     new_shape = &eq_tr;
     new_shape->getInfo();
 
@@ -312,4 +276,5 @@ int main()
     new_shape = &rh;
     new_shape->getInfo();
 }
+
 
